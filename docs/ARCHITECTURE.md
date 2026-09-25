@@ -4,6 +4,13 @@ This repository follows `academic-saas-fullstack-devplan.md` from the project bl
 
 ## Current Phase
 
+### F2: Authentication UI
+
+- `/login` preserves the resolved tenant slug in the server-rendered form context.
+- Login requests use `credentials: include` and expect an httpOnly server session; the browser never stores access tokens in application state.
+- Invalid credentials, unavailable auth service, submitting, and forced password reset states are represented in the UI.
+- Frontend role visibility remains cosmetic; the backend must independently enforce identity, tenant, and permission checks.
+
 ### F1: Tenant-aware routing
 
 - Middleware resolves the tenant slug from the request hostname.
@@ -66,4 +73,4 @@ npx tsc --noEmit
 npm run build
 ```
 
-At scaffold time, the local npm registry install was interrupted and the dependency binaries were unavailable, so F0 remains implemented but not executable-validated until dependencies install successfully.
+At scaffold time, the local npm registry install was interrupted and the dependency binaries were unavailable. F0-F2 source diagnostics are available, but executable lint/typecheck/build validation remains blocked until dependencies install successfully.

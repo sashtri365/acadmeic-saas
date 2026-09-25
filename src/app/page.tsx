@@ -14,7 +14,7 @@ export default async function Home() {
           <p className="eyebrow">Academic operations platform</p>
           <h1>CampusOS <span className="tenant-label">/{tenant.slug}</span></h1>
         </div>
-        <span className="status-pill"><span /> F0 in progress</span>
+        <span className="status-pill"><span /> F2 in progress</span>
       </header>
 
       <section className="hero-grid">
@@ -26,7 +26,7 @@ export default async function Home() {
             The workspace is being assembled phase by phase from the production blueprint.
           </p>
           <div className="hero-actions">
-            <button className="primary-action" type="button">Open workspace <span aria-hidden="true">-&gt;</span></button>
+            <a className="primary-action" href="/login">Open workspace <span aria-hidden="true">-&gt;</span></a>
             <a className="text-action" href="/architecture.md">View architecture</a>
           </div>
         </div>
@@ -44,9 +44,9 @@ export default async function Home() {
           <span className="section-note">Frontend first, backend after validation</span>
         </div>
         <div className="phase-list">
-          <div className="phase-item current"><span className="phase-number">F0</span><div><strong>Setup &amp; tooling</strong><p>Next.js, Tailwind, linting, and the shared visual language.</p></div><span className="phase-state">Current</span></div>
-          <div className="phase-item"><span className="phase-number">F1</span><div><strong>Tenant-aware routing</strong><p>Subdomain resolution and institution branding context.</p></div><span className="phase-state muted">Queued</span></div>
-          <div className="phase-item"><span className="phase-number">F2</span><div><strong>Authentication UI</strong><p>Login, reset flow, refresh, and secure session boundaries.</p></div><span className="phase-state muted">Queued</span></div>
+          <div className="phase-item"><span className="phase-number">F0</span><div><strong>Setup &amp; tooling</strong><p>Next.js, Tailwind, linting, and the shared visual language.</p></div><span className="phase-state">Complete</span></div>
+          <div className="phase-item"><span className="phase-number">F1</span><div><strong>Tenant-aware routing</strong><p>Subdomain resolution and institution branding context.</p></div><span className="phase-state">Complete</span></div>
+          <div className="phase-item current"><span className="phase-number">F2</span><div><strong>Authentication UI</strong><p>Login, reset flow, refresh, and secure session boundaries.</p></div><span className="phase-state">Current</span></div>
         </div>
       </section>
 
