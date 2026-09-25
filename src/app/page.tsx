@@ -1,4 +1,5 @@
 import { headers } from "next/headers";
+import Link from "next/link";
 
 import { resolveTenant } from "@/lib/tenant";
 
@@ -26,7 +27,7 @@ export default async function Home() {
             The workspace is being assembled phase by phase from the production blueprint.
           </p>
           <div className="hero-actions">
-            <a className="primary-action" href="/login">Open workspace <span aria-hidden="true">-&gt;</span></a>
+            <Link className="primary-action" href="/login">Open workspace <span aria-hidden="true">-&gt;</span></Link>
             <a className="text-action" href="/architecture.md">View architecture</a>
           </div>
         </div>
@@ -51,6 +52,6 @@ export default async function Home() {
       </section>
 
       <footer className="footer-line"><span>Tenant isolation is a system rule, not a visual feature.</span><span>CampusOS / foundation</span></footer>
-    </div>
+    </main>
   );
 }

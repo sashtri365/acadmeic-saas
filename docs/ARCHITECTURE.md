@@ -9,6 +9,7 @@ This repository follows `academic-saas-fullstack-devplan.md` from the project bl
 - `/login` preserves the resolved tenant slug in the server-rendered form context.
 - Login requests use `credentials: include` and expect an httpOnly server session; the browser never stores access tokens in application state.
 - Invalid credentials, unavailable auth service, submitting, and forced password reset states are represented in the UI.
+- `/reset-password` provides a forced-reset form and password recovery requests use a neutral response to avoid account enumeration.
 - Frontend role visibility remains cosmetic; the backend must independently enforce identity, tenant, and permission checks.
 
 ### F1: Tenant-aware routing

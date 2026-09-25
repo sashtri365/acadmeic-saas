@@ -9,6 +9,12 @@ export type LoginResult = {
   redirectTo?: string;
 };
 
+export type PasswordResetPayload = {
+  email: string;
+  password: string;
+  tenantSlug: string;
+};
+
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL ?? "";
 
 export async function login(payload: LoginPayload): Promise<LoginResult> {
@@ -28,4 +34,30 @@ export async function login(payload: LoginPayload): Promise<LoginResult> {
   }
 
   return response.json() as Promise<LoginResult>;
+}
+
+export async function requestPasswordReset(email: string, tenantSlug: string): Promise<void> {
+  const response = await fetch(`${API_BASE_URL}/auth/password-reset/request`, {
+    method: "POST",
+    credentials: "include",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ email, tenantSlug }),
+  });
+
+  if (!response.ok) {
+    throw new Error("RESET_UNAVAILABLE");
+  }
+}
+
+export async function resetPassword(payload: PasswordResetPayload): Promise<void> {
+  const response = await fetch(`${API_BASE_URL}/auth/password-reset/complete`, {
+    method: "POST",
+    credentials: "include",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(payload),
+  });
+
+  if (!response.ok) {
+    throw new Error(response.status === 400 ? "RESET_INVALID" : "RESET_UNAVAILABLE");
+  }
 }

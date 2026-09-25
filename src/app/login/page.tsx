@@ -1,4 +1,5 @@
 import { headers } from "next/headers";
+import Link from "next/link";
 
 import { resolveTenant } from "@/lib/tenant";
 import LoginForm from "./login-form";
@@ -10,7 +11,7 @@ export default async function LoginPage() {
   return (
     <main className="auth-shell">
       <div className="auth-brand">
-        <a href="/" className="brand-link"><span className="brand-mark" aria-hidden="true">A</span><span>CampusOS</span></a>
+        <Link href="/" className="brand-link"><span className="brand-mark" aria-hidden="true">A</span><span>CampusOS</span></Link>
         <span className="tenant-context">/{tenant.slug}</span>
       </div>
       <section className="auth-layout">
