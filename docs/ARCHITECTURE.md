@@ -16,6 +16,13 @@ This repository follows `academic-saas-fullstack-devplan.md` from the project bl
 - `/workspace` is protected by a lightweight cookie redirect for UX and a server-side `/auth/session` check for the actual session contract.
 - Role navigation only controls visible links; every destination remains backend-authorized.
 - The frontend does not decode or trust browser-supplied role claims.
+
+### Backend Phase 0: Setup and tooling
+
+- `backend/` contains a FastAPI application factory, environment settings, and `/health` endpoint.
+- Development validation uses pytest and Ruff; dependencies are declared in `backend/pyproject.toml`.
+- Async SQLAlchemy session wiring and Alembic migration configuration are present without opening a database connection during import.
+- Database, Redis, authentication, tenant middleware, and migrations are intentionally deferred to their blueprint phases.
 - Frontend role visibility remains cosmetic; the backend must independently enforce identity, tenant, and permission checks.
 
 ### F1: Tenant-aware routing

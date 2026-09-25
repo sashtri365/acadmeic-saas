@@ -1,0 +1,12 @@
+README.md
+pyproject.toml
+app/__init__.py
+app/config.py
+app/db.py
+app/main.py
+campusos_backend.egg-info/PKG-INFO
+campusos_backend.egg-info/SOURCES.txt
+campusos_backend.egg-info/dependency_links.txt
+campusos_backend.egg-info/requires.txt
+campusos_backend.egg-info/top_level.txt
+tests/test_health.py
