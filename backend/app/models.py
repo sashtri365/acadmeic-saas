@@ -10,6 +10,103 @@ class Base(DeclarativeBase):
     pass
 
 
+class AttendanceRecord(Base):
+    __tablename__ = "attendance_records"
+
+    id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
+    tenant_id: Mapped[uuid.UUID] = mapped_column(
+        UUID(as_uuid=True), ForeignKey("tenants.id", ondelete="CASCADE"), index=True, nullable=False
+    )
+    student_enrollment_id: Mapped[uuid.UUID] = mapped_column(
+        UUID(as_uuid=True), ForeignKey("student_enrollments.id", ondelete="CASCADE"), nullable=False
+    )
+    section_id: Mapped[uuid.UUID] = mapped_column(
+        UUID(as_uuid=True), ForeignKey("academic_sections.id", ondelete="CASCADE"), nullable=False
+    )
+    recorded_by: Mapped[uuid.UUID] = mapped_column(
+        UUID(as_uuid=True), ForeignKey("users.id"), nullable=False
+    )
+    attendance_date: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False)
+    status: Mapped[str] = mapped_column(String(16), nullable=False)
+
+
+class Homework(Base):
+    __tablename__ = "homework"
+
+    id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
+    tenant_id: Mapped[uuid.UUID] = mapped_column(
+        UUID(as_uuid=True), ForeignKey("tenants.id", ondelete="CASCADE"), index=True, nullable=False
+    )
+    section_id: Mapped[uuid.UUID] = mapped_column(
+        UUID(as_uuid=True), ForeignKey("academic_sections.id", ondelete="CASCADE"), nullable=False
+    )
+    subject_id: Mapped[uuid.UUID] = mapped_column(
+        UUID(as_uuid=True), ForeignKey("academic_subjects.id", ondelete="CASCADE"), nullable=False
+    )
+    teacher_user_id: Mapped[uuid.UUID] = mapped_column(
+        UUID(as_uuid=True), ForeignKey("users.id"), nullable=False
+    )
+    title: Mapped[str] = mapped_column(String(200), nullable=False)
+    instructions: Mapped[str] = mapped_column(String(4000), nullable=False)
+    due_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False)
+
+
+class Exam(Base):
+    __tablename__ = "exams"
+
+    id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
+    tenant_id: Mapped[uuid.UUID] = mapped_column(
+        UUID(as_uuid=True), ForeignKey("tenants.id", ondelete="CASCADE"), index=True, nullable=False
+    )
+    section_id: Mapped[uuid.UUID] = mapped_column(
+        UUID(as_uuid=True), ForeignKey("academic_sections.id", ondelete="CASCADE"), nullable=False
+    )
+    title: Mapped[str] = mapped_column(String(160), nullable=False)
+    published: Mapped[bool] = mapped_column(Boolean, default=False, nullable=False)
+
+
+class Mark(Base):
+    __tablename__ = "marks"
+
+    id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
+    tenant_id: Mapped[uuid.UUID] = mapped_column(
+        UUID(as_uuid=True), ForeignKey("tenants.id", ondelete="CASCADE"), index=True, nullable=False
+    )
+    exam_id: Mapped[uuid.UUID] = mapped_column(
+        UUID(as_uuid=True), ForeignKey("exams.id", ondelete="CASCADE"), nullable=False
+    )
+    subject_id: Mapped[uuid.UUID] = mapped_column(
+        UUID(as_uuid=True), ForeignKey("academic_subjects.id", ondelete="CASCADE"), nullable=False
+    )
+    student_enrollment_id: Mapped[uuid.UUID] = mapped_column(
+        UUID(as_uuid=True), ForeignKey("student_enrollments.id", ondelete="CASCADE"), nullable=False
+    )
+    teacher_assignment_id: Mapped[uuid.UUID] = mapped_column(
+        UUID(as_uuid=True), ForeignKey("teacher_assignments.id"), nullable=False
+    )
+    score: Mapped[float] = mapped_column(nullable=False)
+    maximum_score: Mapped[float] = mapped_column(nullable=False)
+
+
+def validate_score(score: float, maximum_score: float) -> None:
+    if maximum_score <= 0 or score < 0 or score > maximum_score:
+        raise ValueError("score must be between zero and maximum_score")
+
+
+def calculate_grade(score: float, maximum_score: float) -> str:
+    validate_score(score, maximum_score)
+    percentage = score / maximum_score * 100
+    if percentage >= 90:
+        return "A"
+    if percentage >= 80:
+        return "B"
+    if percentage >= 70:
+        return "C"
+    if percentage >= 60:
+        return "D"
+    return "F"
+
+
 class Tenant(Base):
     __tablename__ = "tenants"
 

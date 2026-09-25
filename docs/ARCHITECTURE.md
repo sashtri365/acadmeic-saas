@@ -45,6 +45,13 @@ This repository follows `academic-saas-fullstack-devplan.md` from the project bl
 - Academic data uses tenant-scoped academic years, programs, levels, sections, and subjects with institution-type metadata rather than hardcoded grades.
 - Migration `0003_identity_and_academics` and structural tests cover the hierarchy and tenant ownership requirements.
 
+### Backend Phase 6–7: Attendance, homework, examinations, and results
+
+- Attendance, homework, exams, and marks are tenant-owned and linked to academic scope.
+- Mark scores are range-validated and converted to grades only after validation; exam publication remains an explicit state.
+- Teacher assignment scope checks reject another teacher's subject/section, including crafted requests.
+- Migration `0004_attendance_exams_results` and workflow tests cover the core security boundary.
+
 ### Cloud readiness boundary
 
 - Frontend and backend production images, local Compose dependencies, and GitHub Actions CI are committed.

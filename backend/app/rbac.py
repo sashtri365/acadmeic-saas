@@ -28,3 +28,12 @@ def require_scope(
         raise HTTPException(
             status_code=status.HTTP_403_FORBIDDEN, detail="Resource scope violation"
         )
+
+
+def can_edit_assignment(
+    user: AuthenticatedUser,
+    assignment_teacher_id: UUID,
+    assignment_scope: str,
+    requested_scope: str,
+) -> bool:
+    return user.user_id == assignment_teacher_id and assignment_scope == requested_scope
