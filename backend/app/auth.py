@@ -6,6 +6,7 @@ from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
 from pydantic import BaseModel, EmailStr
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
+from sqlalchemy.orm import selectinload
 
 from .config import get_settings
 from .db import get_db_session
@@ -79,6 +80,7 @@ async def login(
     result = await session.execute(
         select(User, Tenant)
         .join(Tenant, User.tenant_id == Tenant.id)
+        .options(selectinload(User.roles))
         .where(
             Tenant.subdomain == body.tenantSlug,
             User.email == body.email.lower(),
@@ -118,6 +120,7 @@ async def get_session(
     result = await session.execute(
         select(User, Tenant)
         .join(Tenant, User.tenant_id == Tenant.id)
+        .options(selectinload(User.roles))
         .where(User.id == authenticated_user.user_id)
     )
     row = result.first()

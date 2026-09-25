@@ -94,6 +94,14 @@ This repository follows `academic-saas-fullstack-devplan.md` from the project bl
 - Authorized admin-only read-only audit and role dashboard routes are present in the frontend.
 - Migration `0008_dashboards_audit` and audit scope tests cover the final application security foundation.
 
+### Data structure and algorithm efficiency audit
+
+- Role collections use `frozenset`/set intersection for constant-time membership checks; form field validation uses a set for duplicate detection.
+- Async authentication queries eager-load roles to avoid lazy-load round trips and N+1 behavior.
+- Migration `0009_performance_indexes` adds tenant-first composite indexes for users, attendance, marks, messages, invoices, and audit logs.
+- Scoped uniqueness prevents duplicate tenant emails, subject codes, and marks while keeping lookups index-backed.
+- Large-list endpoints should use cursor/keyset pagination when added; no current endpoint performs an unbounded list query.
+
 ### Cloud readiness boundary
 
 - Frontend and backend production images, local Compose dependencies, and GitHub Actions CI are committed.
