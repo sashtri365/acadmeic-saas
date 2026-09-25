@@ -22,6 +22,13 @@ This repository follows `academic-saas-fullstack-devplan.md` from the project bl
 - `backend/` contains a FastAPI application factory, environment settings, and `/health` endpoint.
 - Development validation uses pytest and Ruff; dependencies are declared in `backend/pyproject.toml`.
 - Async SQLAlchemy session wiring and Alembic migration configuration are present without opening a database connection during import.
+
+### Backend Phase 1: Multi-tenant foundation
+
+- `tenants` and `tenant_settings` tables use UUID tenant ownership and a unique subdomain.
+- Request hostname resolution produces a tenant context; local development defaults to `demo`.
+- Tenant-scoped query construction rejects a missing `tenant_id` before SQL is executed.
+- Cross-tenant isolation tests cover hostname resolution and the mandatory query predicate.
 - Database, Redis, authentication, tenant middleware, and migrations are intentionally deferred to their blueprint phases.
 - Frontend role visibility remains cosmetic; the backend must independently enforce identity, tenant, and permission checks.
 
