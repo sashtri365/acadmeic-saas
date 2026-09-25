@@ -5,6 +5,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from starlette.middleware.trustedhost import TrustedHostMiddleware
 
+from .auth import router as auth_router
 from .config import get_settings
 
 
@@ -28,6 +29,7 @@ def create_app() -> FastAPI:
         TrustedHostMiddleware,
         allowed_hosts=[host.strip() for host in settings.allowed_hosts.split(",") if host.strip()],
     )
+    app.include_router(auth_router)
     app.add_middleware(
         CORSMiddleware,
         allow_origins=[

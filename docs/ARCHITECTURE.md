@@ -32,6 +32,13 @@ This repository follows `academic-saas-fullstack-devplan.md` from the project bl
 - Redis, authentication, and domain APIs are intentionally deferred to their blueprint phases; the initial tenant migration is now present.
 - Frontend role visibility remains cosmetic; the backend must independently enforce identity, tenant, and permission checks.
 
+### Backend Phase 2–3: Identity, authentication, and RBAC
+
+- Argon2id password hashing and signed, short-lived JWT access sessions are implemented in `backend/app/security.py`.
+- `/auth/login`, `/auth/session`, `/auth/logout`, password-reset contract endpoints, and httpOnly session cookies are implemented.
+- Roles, permissions, user-role links, teacher assignments, tenant checks, and resource-scope checks are represented in the schema and backend permission boundary.
+- The backend never trusts role or tenant identifiers from request bodies for authorization; claims are issued and checked server-side.
+
 ### Cloud readiness boundary
 
 - Frontend and backend production images, local Compose dependencies, and GitHub Actions CI are committed.

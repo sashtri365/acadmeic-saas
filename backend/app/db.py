@@ -17,10 +17,18 @@ def create_engine() -> AsyncEngine:
     return create_async_engine(database_url, pool_pre_ping=True)
 
 
-engine = create_engine()
-session_factory = async_sessionmaker(engine, expire_on_commit=False)
+engine: AsyncEngine | None = None
+session_factory: async_sessionmaker[AsyncSession] | None = None
+
+
+def get_session_factory() -> async_sessionmaker[AsyncSession]:
+    global engine, session_factory
+    if session_factory is None:
+        engine = create_engine()
+        session_factory = async_sessionmaker(engine, expire_on_commit=False)
+    return session_factory
 
 
 async def get_db_session() -> AsyncIterator[AsyncSession]:
-    async with session_factory() as session:
+    async with get_session_factory()() as session:
         yield session

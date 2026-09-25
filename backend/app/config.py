@@ -10,6 +10,10 @@ class Settings(BaseSettings):
     database_url: str | None = None
     allowed_hosts: str = "localhost,127.0.0.1"
     cors_origins: str = "http://localhost:3000"
+    jwt_secret: str | None = None
+    access_token_minutes: int = 15
+    refresh_token_days: int = 7
+    secure_cookies: bool = False
 
     model_config = SettingsConfigDict(env_file=".env", env_file_encoding="utf-8", extra="ignore")
 
