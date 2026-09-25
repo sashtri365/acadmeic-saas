@@ -10,6 +10,12 @@ This repository follows `academic-saas-fullstack-devplan.md` from the project bl
 - Login requests use `credentials: include` and expect an httpOnly server session; the browser never stores access tokens in application state.
 - Invalid credentials, unavailable auth service, submitting, and forced password reset states are represented in the UI.
 - `/reset-password` provides a forced-reset form and password recovery requests use a neutral response to avoid account enumeration.
+
+### F3: Role-based route guards
+
+- `/workspace` is protected by a lightweight cookie redirect for UX and a server-side `/auth/session` check for the actual session contract.
+- Role navigation only controls visible links; every destination remains backend-authorized.
+- The frontend does not decode or trust browser-supplied role claims.
 - Frontend role visibility remains cosmetic; the backend must independently enforce identity, tenant, and permission checks.
 
 ### F1: Tenant-aware routing
