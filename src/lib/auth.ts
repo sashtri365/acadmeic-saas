@@ -21,7 +21,7 @@ export async function login(payload: LoginPayload): Promise<LoginResult> {
   const response = await fetch(`${API_BASE_URL}/auth/login`, {
     method: "POST",
     credentials: "include",
-    headers: { "Content-Type": "application/json" },
+    headers: { "Content-Type": "application/json", "X-Tenant-Slug": payload.tenantSlug },
     body: JSON.stringify(payload),
   });
 
@@ -40,7 +40,7 @@ export async function requestPasswordReset(email: string, tenantSlug: string): P
   const response = await fetch(`${API_BASE_URL}/auth/password-reset/request`, {
     method: "POST",
     credentials: "include",
-    headers: { "Content-Type": "application/json" },
+    headers: { "Content-Type": "application/json", "X-Tenant-Slug": tenantSlug },
     body: JSON.stringify({ email, tenantSlug }),
   });
 

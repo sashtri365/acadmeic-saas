@@ -14,7 +14,6 @@ from .models import Tenant, User
 from .rate_limit import allow_login_attempt
 from .rbac import AuthenticatedUser
 from .security import create_access_token, decode_access_token, hash_password, verify_password
-from .tenancy import resolve_tenant_context
 
 router = APIRouter(prefix="/auth", tags=["authentication"])
 bearer = HTTPBearer(auto_error=False)
@@ -91,10 +90,10 @@ async def login(
     request: Request,
     session: AsyncSession = Depends(get_db_session),
 ) -> SessionResponse:
-    tenant_context = resolve_tenant_context(request)
-    if body.tenantSlug != tenant_context.subdomain:
+    requested_tenant = request.headers.get("x-tenant-slug") or body.tenantSlug
+    if requested_tenant != body.tenantSlug:
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid credentials")
-    if not await allow_login_attempt(request, tenant_context.subdomain):
+    if not await allow_login_attempt(request, requested_tenant):
         raise HTTPException(
             status_code=status.HTTP_429_TOO_MANY_REQUESTS, detail="Too many login attempts"
         )
