@@ -59,6 +59,13 @@ This repository follows `academic-saas-fullstack-devplan.md` from the project bl
 - Parent links are verified records and support multiple enrollments across institutions.
 - Migration `0005_messaging_parent_links` and participant/tenant tests cover the isolation boundary.
 
+### Backend Phase 9–10: Fees, invoicing, and payment infrastructure
+
+- Fee structures, invoices, PSP-tokenized payments, transactions, receipts, refunds, and reconciliation logs are tenant-owned.
+- Webhook signatures use constant-time HMAC comparison and payment requests require bounded idempotency keys.
+- No raw card/account number columns exist; provider references and tokenized identifiers are the only payment fields.
+- Migration `0006_fees_payments` and payment security tests cover the provider boundary.
+
 ### Cloud readiness boundary
 
 - Frontend and backend production images, local Compose dependencies, and GitHub Actions CI are committed.
