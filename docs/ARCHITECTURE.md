@@ -39,6 +39,12 @@ This repository follows `academic-saas-fullstack-devplan.md` from the project bl
 - Roles, permissions, user-role links, teacher assignments, tenant checks, and resource-scope checks are represented in the schema and backend permission boundary.
 - The backend never trusts role or tenant identifiers from request bodies for authorization; claims are issued and checked server-side.
 
+### Backend Phase 4–5: Identity management and academic structure
+
+- Global student identities link to tenant-specific enrollments; transfers require an immutable consent record.
+- Academic data uses tenant-scoped academic years, programs, levels, sections, and subjects with institution-type metadata rather than hardcoded grades.
+- Migration `0003_identity_and_academics` and structural tests cover the hierarchy and tenant ownership requirements.
+
 ### Cloud readiness boundary
 
 - Frontend and backend production images, local Compose dependencies, and GitHub Actions CI are committed.
