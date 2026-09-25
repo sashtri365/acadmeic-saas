@@ -1,11 +1,18 @@
-export default function Home() {
+import { headers } from "next/headers";
+
+import { resolveTenant } from "@/lib/tenant";
+
+export default async function Home() {
+  const requestHeaders = await headers();
+  const tenant = resolveTenant(requestHeaders.get("x-tenant-hostname") ?? requestHeaders.get("host") ?? "localhost");
+
   return (
     <main className="shell">
       <header className="topbar">
         <div className="brand-mark" aria-hidden="true">A</div>
         <div>
           <p className="eyebrow">Academic operations platform</p>
-          <h1>CampusOS</h1>
+          <h1>CampusOS <span className="tenant-label">/{tenant.slug}</span></h1>
         </div>
         <span className="status-pill"><span /> F0 in progress</span>
       </header>

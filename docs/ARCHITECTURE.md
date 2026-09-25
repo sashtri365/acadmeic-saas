@@ -4,6 +4,12 @@ This repository follows `academic-saas-fullstack-devplan.md` from the project bl
 
 ## Current Phase
 
+### F1: Tenant-aware routing
+
+- Middleware resolves the tenant slug from the request hostname.
+- The resolved slug is forwarded as request-scoped headers, never trusted from a client form field.
+- Local development uses the `demo` tenant; production subdomains use the first hostname segment.
+
 ### F0: Frontend setup and tooling
 
 - Next.js App Router with TypeScript
