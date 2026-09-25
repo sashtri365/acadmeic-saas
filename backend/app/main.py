@@ -16,9 +16,6 @@ async def lifespan(_: FastAPI) -> AsyncIterator[None]:
 
 def create_app() -> FastAPI:
     settings = get_settings()
-    if settings.environment == "production" and not settings.database_url:
-        raise RuntimeError("DATABASE_URL is required in production")
-
     app = FastAPI(
         title=settings.app_name,
         lifespan=lifespan,

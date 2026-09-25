@@ -44,7 +44,7 @@ This repository follows `academic-saas-fullstack-devplan.md` from the project bl
 - Request hostname resolution produces a tenant context; local development defaults to `demo`.
 - Tenant-scoped query construction rejects a missing `tenant_id` before SQL is executed.
 - Cross-tenant isolation tests cover hostname resolution and the mandatory query predicate.
-- Redis, authentication, and domain APIs are intentionally deferred to their blueprint phases; the initial tenant migration is now present.
+- Authentication and Redis-backed abuse protection are now present; remaining domain APIs continue through their blueprint phases.
 - Frontend role visibility remains cosmetic; the backend must independently enforce identity, tenant, and permission checks.
 
 ### Backend Phase 2–3: Identity, authentication, and RBAC
@@ -80,6 +80,7 @@ This repository follows `academic-saas-fullstack-devplan.md` from the project bl
 - Webhook signatures use constant-time HMAC comparison and payment requests require bounded idempotency keys.
 - No raw card/account number columns exist; provider references and tokenized identifiers are the only payment fields.
 - Migration `0006_fees_payments` and payment security tests cover the provider boundary.
+- Nepali integration note: Stripe/Razorpay/eSewa/Khalti adapter `PaymentGateway` interfaceमा राख्ने; PSP-hosted checkoutबाट आएको token/reference मात्र save गर्ने। Card/CVV/backend raw bank details कहिल्यै store नगर्ने।
 
 ### Backend Phase 11–12: Notifications and configurable forms
 
@@ -108,6 +109,13 @@ This repository follows `academic-saas-fullstack-devplan.md` from the project bl
 - Production secrets are environment-managed and have no insecure code defaults.
 - Cloud work remaining is infrastructure execution only: managed PostgreSQL/Redis, secret injection, migration job, TLS/domains, and traffic cutover.
 - CI is the required pre-deploy gate; live database credentials are intentionally not stored in this repository.
+
+### Security hardening audit
+
+- Production configuration rejects missing database/JWT/Redis secrets, weak JWT keys, insecure cookies, wildcard hosts, and wildcard CORS.
+- Login attempts use a shared Redis fixed-window limiter; if Redis is unavailable, production fails closed.
+- Password reset enforces tenant matching, same-origin checks when an Origin header is present, and a 12-character upper-case/number policy.
+- Auth role relations are eager-loaded to avoid async lazy-load failures and N+1 queries.
 
 ### F1: Tenant-aware routing
 

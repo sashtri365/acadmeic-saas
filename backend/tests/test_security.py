@@ -2,6 +2,7 @@ from uuid import uuid4
 
 import pytest
 
+from app.auth import validate_password_policy
 from app.config import get_settings
 from app.rbac import AuthenticatedUser, require_permission, require_scope
 from app.security import create_access_token, decode_access_token, hash_password, verify_password
@@ -38,3 +39,9 @@ def test_rbac_rejects_wrong_tenant_and_role() -> None:
     with pytest.raises(Exception) as tenant_error:
         require_scope(user, uuid4())
     assert tenant_error.value.status_code == 403
+
+
+def test_password_policy_rejects_weak_passwords() -> None:
+    with pytest.raises(Exception):
+        validate_password_policy("short")
+    validate_password_policy("Strong-password-123")

@@ -11,6 +11,7 @@ from sqlalchemy.orm import selectinload
 from .config import get_settings
 from .db import get_db_session
 from .models import Tenant, User
+from .rate_limit import allow_login_attempt
 from .rbac import AuthenticatedUser
 from .security import create_access_token, decode_access_token, hash_password, verify_password
 from .tenancy import resolve_tenant_context
@@ -42,6 +43,23 @@ class PasswordResetComplete(BaseModel):
     email: EmailStr
     password: str
     tenantSlug: str
+
+
+def validate_password_policy(password: str) -> None:
+    if (
+        len(password) < 12
+        or not any(char.isupper() for char in password)
+        or not any(char.isdigit() for char in password)
+    ):
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST, detail="Password does not meet policy"
+        )
+
+
+def validate_same_origin(request: Request) -> None:
+    origin = request.headers.get("origin")
+    if origin and origin not in {item.strip() for item in get_settings().cors_origins.split(",")}:
+        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Origin is not allowed")
 
 
 async def current_user(
@@ -76,6 +94,10 @@ async def login(
     tenant_context = resolve_tenant_context(request)
     if body.tenantSlug != tenant_context.subdomain:
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid credentials")
+    if not await allow_login_attempt(request, tenant_context.subdomain):
+        raise HTTPException(
+            status_code=status.HTTP_429_TOO_MANY_REQUESTS, detail="Too many login attempts"
+        )
 
     result = await session.execute(
         select(User, Tenant)
@@ -145,17 +167,30 @@ async def request_password_reset(_: PasswordResetRequest) -> None:
 @router.post("/password-reset/complete", status_code=status.HTTP_204_NO_CONTENT)
 async def complete_password_reset(
     body: PasswordResetComplete,
+    request: Request,
     authenticated_user: AuthenticatedUser = Depends(current_user),
     session: AsyncSession = Depends(get_db_session),
 ) -> None:
-    result = await session.execute(select(User).where(User.id == authenticated_user.user_id))
-    user = result.scalar_one_or_none()
-    if user is None or user.email != body.email.lower() or not user.must_reset_password:
+    validate_same_origin(request)
+    validate_password_policy(body.password)
+    result = await session.execute(
+        select(User, Tenant)
+        .join(Tenant, User.tenant_id == Tenant.id)
+        .where(User.id == authenticated_user.user_id)
+    )
+    row = result.first()
+    if (
+        row is None
+        or row.User.email != body.email.lower()
+        or row.Tenant.subdomain != body.tenantSlug
+        or row.User.tenant_id != authenticated_user.tenant_id
+        or not row.User.must_reset_password
+    ):
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST, detail="Reset is not available"
         )
-    user.password_hash = hash_password(body.password)
-    user.must_reset_password = False
+    row.User.password_hash = hash_password(body.password)
+    row.User.must_reset_password = False
     await session.commit()
 
 
