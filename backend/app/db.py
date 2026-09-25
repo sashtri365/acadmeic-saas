@@ -11,7 +11,10 @@ from .config import get_settings
 
 
 def create_engine() -> AsyncEngine:
-    return create_async_engine(get_settings().database_url, pool_pre_ping=True)
+    database_url = get_settings().database_url
+    if not database_url:
+        raise RuntimeError("DATABASE_URL must be configured before database access")
+    return create_async_engine(database_url, pool_pre_ping=True)
 
 
 engine = create_engine()

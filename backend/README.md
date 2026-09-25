@@ -1,6 +1,6 @@
 # CampusOS Backend
 
-Phase 0 provides the FastAPI application factory, environment settings, and a health endpoint.
+The backend provides the FastAPI application factory, secure environment settings, tenant foundation models, and a health endpoint.
 
 ## Local setup
 
@@ -15,6 +15,6 @@ alembic check
 uvicorn app.main:app --reload
 ```
 
-Health check: `GET http://localhost:8000/health`
+Health check: `GET http://localhost:8000/health`. Production API documentation is disabled by configuration.
 
-The backend does not yet authenticate users or access a database. Those behaviors begin in later blueprint phases.
+The backend does not yet authenticate users or expose domain APIs. Those behaviors begin in later blueprint phases. Set `DATABASE_URL` through the cloud secret manager before starting a production instance.

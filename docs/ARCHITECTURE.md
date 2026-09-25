@@ -29,8 +29,15 @@ This repository follows `academic-saas-fullstack-devplan.md` from the project bl
 - Request hostname resolution produces a tenant context; local development defaults to `demo`.
 - Tenant-scoped query construction rejects a missing `tenant_id` before SQL is executed.
 - Cross-tenant isolation tests cover hostname resolution and the mandatory query predicate.
-- Database, Redis, authentication, tenant middleware, and migrations are intentionally deferred to their blueprint phases.
+- Redis, authentication, and domain APIs are intentionally deferred to their blueprint phases; the initial tenant migration is now present.
 - Frontend role visibility remains cosmetic; the backend must independently enforce identity, tenant, and permission checks.
+
+### Cloud readiness boundary
+
+- Frontend and backend production images, local Compose dependencies, and GitHub Actions CI are committed.
+- Production secrets are environment-managed and have no insecure code defaults.
+- Cloud work remaining is infrastructure execution only: managed PostgreSQL/Redis, secret injection, migration job, TLS/domains, and traffic cutover.
+- CI is the required pre-deploy gate; live database credentials are intentionally not stored in this repository.
 
 ### F1: Tenant-aware routing
 
@@ -94,4 +101,4 @@ npx tsc --noEmit
 npm run build
 ```
 
-At scaffold time, the local npm registry install was interrupted and the dependency binaries were unavailable. F0-F2 source diagnostics are available, but executable lint/typecheck/build validation remains blocked until dependencies install successfully.
+The frontend and backend executable validation gates are available locally and in CI. Live PostgreSQL migration execution remains an infrastructure step because this repository does not contain database credentials.

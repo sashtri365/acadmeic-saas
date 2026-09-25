@@ -7,7 +7,9 @@ class Settings(BaseSettings):
     app_name: str = "CampusOS API"
     environment: str = "development"
     api_prefix: str = "/api"
-    database_url: str = "postgresql+asyncpg://campusos:campusos@localhost:5432/campusos"
+    database_url: str | None = None
+    allowed_hosts: str = "localhost,127.0.0.1"
+    cors_origins: str = "http://localhost:3000"
 
     model_config = SettingsConfigDict(env_file=".env", env_file_encoding="utf-8", extra="ignore")
 
