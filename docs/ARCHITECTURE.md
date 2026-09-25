@@ -66,6 +66,12 @@ This repository follows `academic-saas-fullstack-devplan.md` from the project bl
 - No raw card/account number columns exist; provider references and tokenized identifiers are the only payment fields.
 - Migration `0006_fees_payments` and payment security tests cover the provider boundary.
 
+### Backend Phase 11–12: Notifications and configurable forms
+
+- Notification bodies are redacted to a tap-to-view message whenever sensitive markers are detected.
+- Form definitions are backend-owned JSON schemas with validated field names/types; submissions are tenant-scoped.
+- Migration `0007_notifications_forms` and privacy/schema tests cover the boundary.
+
 ### Cloud readiness boundary
 
 - Frontend and backend production images, local Compose dependencies, and GitHub Actions CI are committed.

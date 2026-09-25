@@ -1,7 +1,7 @@
 import uuid
 from datetime import datetime
 
-from sqlalchemy import Boolean, Column, DateTime, ForeignKey, Numeric, String, Table, func
+from sqlalchemy import JSON, Boolean, Column, DateTime, ForeignKey, Numeric, String, Table, func
 from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column, relationship
 
@@ -245,6 +245,61 @@ class ReconciliationLog(Base):
     provider: Mapped[str] = mapped_column(String(40), nullable=False)
     provider_event_id: Mapped[str] = mapped_column(String(160), nullable=False)
     status: Mapped[str] = mapped_column(String(24), nullable=False)
+
+
+class NotificationTemplate(Base):
+    __tablename__ = "notification_templates"
+
+    id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
+    tenant_id: Mapped[uuid.UUID] = mapped_column(
+        UUID(as_uuid=True), ForeignKey("tenants.id", ondelete="CASCADE"), index=True, nullable=False
+    )
+    channel: Mapped[str] = mapped_column(String(20), nullable=False)
+    title: Mapped[str] = mapped_column(String(160), nullable=False)
+    body_template: Mapped[str] = mapped_column(String(1000), nullable=False)
+
+
+class Notification(Base):
+    __tablename__ = "notifications"
+
+    id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
+    tenant_id: Mapped[uuid.UUID] = mapped_column(
+        UUID(as_uuid=True), ForeignKey("tenants.id", ondelete="CASCADE"), index=True, nullable=False
+    )
+    recipient_user_id: Mapped[uuid.UUID] = mapped_column(
+        UUID(as_uuid=True), ForeignKey("users.id", ondelete="CASCADE"), nullable=False
+    )
+    title: Mapped[str] = mapped_column(String(160), nullable=False)
+    body: Mapped[str] = mapped_column(String(1000), nullable=False)
+    sensitive: Mapped[bool] = mapped_column(Boolean, default=False, nullable=False)
+
+
+class FormDefinition(Base):
+    __tablename__ = "form_definitions"
+
+    id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
+    tenant_id: Mapped[uuid.UUID] = mapped_column(
+        UUID(as_uuid=True), ForeignKey("tenants.id", ondelete="CASCADE"), index=True, nullable=False
+    )
+    form_key: Mapped[str] = mapped_column(String(80), nullable=False)
+    version: Mapped[int] = mapped_column(nullable=False)
+    schema: Mapped[dict] = mapped_column(JSON, nullable=False)
+
+
+class FormSubmission(Base):
+    __tablename__ = "form_submissions"
+
+    id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
+    tenant_id: Mapped[uuid.UUID] = mapped_column(
+        UUID(as_uuid=True), ForeignKey("tenants.id", ondelete="CASCADE"), index=True, nullable=False
+    )
+    form_definition_id: Mapped[uuid.UUID] = mapped_column(
+        UUID(as_uuid=True), ForeignKey("form_definitions.id"), nullable=False
+    )
+    submitted_by: Mapped[uuid.UUID] = mapped_column(
+        UUID(as_uuid=True), ForeignKey("users.id"), nullable=False
+    )
+    values: Mapped[dict] = mapped_column(JSON, nullable=False)
 
 
 def validate_score(score: float, maximum_score: float) -> None:
