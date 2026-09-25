@@ -15,7 +15,7 @@ export default async function Home() {
           <p className="eyebrow">Academic operations platform</p>
           <h1>CampusOS <span className="tenant-label">/{tenant.slug}</span></h1>
         </div>
-        <span className="status-pill"><span /> F2 in progress</span>
+        <span className="status-pill"><span /> Foundation ready</span>
       </header>
 
       <section className="hero-grid">
@@ -33,9 +33,9 @@ export default async function Home() {
         </div>
         <aside className="signal-panel" aria-label="Build status">
           <div className="panel-heading"><span>Build signal</span><strong>01 / 16</strong></div>
-          <div className="signal-line"><span className="signal-dot" /><span>Frontend foundation</span><b>Active</b></div>
+          <div className="signal-line"><span className="signal-dot" /><span>Platform foundation</span><b>Ready</b></div>
           <div className="progress-track"><span /></div>
-          <div className="panel-foot"><span>Next checkpoint</span><strong>Tenant context</strong></div>
+          <div className="panel-foot"><span>Next step</span><strong>Sign in to explore</strong></div>
         </aside>
       </section>
 
@@ -47,7 +47,7 @@ export default async function Home() {
         <div className="phase-list">
           <div className="phase-item"><span className="phase-number">F0</span><div><strong>Setup &amp; tooling</strong><p>Next.js, Tailwind, linting, and the shared visual language.</p></div><span className="phase-state">Complete</span></div>
           <div className="phase-item"><span className="phase-number">F1</span><div><strong>Tenant-aware routing</strong><p>Subdomain resolution and institution branding context.</p></div><span className="phase-state">Complete</span></div>
-          <div className="phase-item current"><span className="phase-number">F2</span><div><strong>Authentication UI</strong><p>Login, reset flow, refresh, and secure session boundaries.</p></div><span className="phase-state">Current</span></div>
+          <div className="phase-item current"><span className="phase-number">F2</span><div><strong>Authentication UI</strong><p>Login, reset flow, refresh, and secure session boundaries.</p></div><span className="phase-state">Ready</span></div>
         </div>
       </section>
 
