@@ -4,6 +4,21 @@ This repository follows `academic-saas-fullstack-devplan.md` from the project bl
 
 ## Current Phase
 
+## Phase completion status
+
+| Phases | Status | Implementation boundary |
+|---|---|---|
+| F0–F3 | Complete | Next.js foundation, tenant routing, auth UI, reset flow, protected workspace, role navigation |
+| Backend 0–1 | Complete | FastAPI tooling, async SQLAlchemy/Alembic, tenants, settings, tenant query guard |
+| Backend 2–3 | Complete | Argon2id, JWT/httpOnly sessions, identity schema, RBAC and scope checks |
+| Backend 4–5 | Complete | Global student identity, consent transfer, flexible academic hierarchy |
+| Backend 6–7 | Complete | Attendance/homework/exam/marks schema, validation, grade and teacher-scope checks |
+| Backend 8/13 | Complete | Participant-scoped messaging and verified parent-student links |
+| Backend 9–10 | Complete | Tokenized payment schema, idempotency and webhook signature boundary |
+| Backend 11–12 | Complete | Redacted notifications and backend-defined form schemas |
+| Backend 14–15 | Complete | Role dashboard scope, redacted append-only audit foundation and read-only UI |
+| Phase 16 | Cloud handoff ready | Provider execution remains: managed services, secrets, migration job, domains/TLS and traffic cutover |
+
 ### F2: Authentication UI
 
 - `/login` preserves the resolved tenant slug in the server-rendered form context.
@@ -71,6 +86,13 @@ This repository follows `academic-saas-fullstack-devplan.md` from the project bl
 - Notification bodies are redacted to a tap-to-view message whenever sensitive markers are detected.
 - Form definitions are backend-owned JSON schemas with validated field names/types; submissions are tenant-scoped.
 - Migration `0007_notifications_forms` and privacy/schema tests cover the boundary.
+
+### Backend Phase 14–15: Dashboards, reports, and audit hardening
+
+- Dashboard scope contracts always carry tenant, user, and role context; the frontend cards remain cosmetic.
+- Audit metadata redacts credentials/tokens and the migration revokes public update/delete permissions on `audit_logs`.
+- Authorized admin-only read-only audit and role dashboard routes are present in the frontend.
+- Migration `0008_dashboards_audit` and audit scope tests cover the final application security foundation.
 
 ### Cloud readiness boundary
 
