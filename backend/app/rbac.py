@@ -37,3 +37,9 @@ def can_edit_assignment(
     requested_scope: str,
 ) -> bool:
     return user.user_id == assignment_teacher_id and assignment_scope == requested_scope
+
+
+def can_read_conversation(
+    user: AuthenticatedUser, participant_user_ids: set[UUID], tenant_id: UUID
+) -> bool:
+    return user.tenant_id == tenant_id and user.user_id in participant_user_ids

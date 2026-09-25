@@ -52,6 +52,13 @@ This repository follows `academic-saas-fullstack-devplan.md` from the project bl
 - Teacher assignment scope checks reject another teacher's subject/section, including crafted requests.
 - Migration `0004_attendance_exams_results` and workflow tests cover the core security boundary.
 
+### Backend Phase 8/13: Scoped messaging and parent accounts
+
+- Conversations, participants, messages, and parent-student links are tenant-owned.
+- Conversation visibility requires both the requesting user to be a participant and the tenant to match; guessing an ID is insufficient.
+- Parent links are verified records and support multiple enrollments across institutions.
+- Migration `0005_messaging_parent_links` and participant/tenant tests cover the isolation boundary.
+
 ### Cloud readiness boundary
 
 - Frontend and backend production images, local Compose dependencies, and GitHub Actions CI are committed.
